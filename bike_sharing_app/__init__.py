@@ -3,8 +3,13 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 
 app = Flask(__name__)
-app.config["SECRET_KEY"] = "very secret"
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///..//user.db"
+# app.config["SECRET_KEY"] = "very secret"
+# app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///..//user.db"
+# app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+
+
+app.config["SECRET_KEY"] = SECRET_KEY
+app.config["SQLALCHEMY_DATABASE_URI"] = SQLALCHEMY_DATABASE_URI
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db = SQLAlchemy(app)
