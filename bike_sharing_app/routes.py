@@ -1,3 +1,4 @@
+from logging import captureWarnings
 from bike_sharing_app import app
 import pandas as pd
 from .forms import LoginForm, PredictionForm
@@ -10,6 +11,7 @@ import json
 import plotly
 import plotly.express as px
 import requests
+from sentry_sdk import capture_message
 
 @app.route("/")
 def home():
@@ -22,6 +24,7 @@ def login():
         user = User.query.filter_by(email_address=form.mail.data).first()
         if user and check_password_hash(user.password_hash, form.password.data):
             login_user(user)
+            capture_message("session state : login sucess")
             flash("Logged in with success", category="success")
             return redirect(url_for('home'))
         else:
@@ -137,3 +140,8 @@ def forecast(day, month, hour):
     df = df[(df["day_number"]==day) & (df["hour"] == hour) & (df["month"] == month) & (df["year"] == 2011)]
     df.drop(["weather", "count", "atemp", "datetime"], axis=1, inplace=True)
     return df
+
+# test log avec sentry
+@app.route('/debug-sentry')
+def trigger_error():
+    division_by_zero = 1 / 0
