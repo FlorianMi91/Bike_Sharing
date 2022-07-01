@@ -2,6 +2,7 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 import os
+from flask_applicationinsights import ApplicationInsights
 
 app = Flask(__name__)
 # app.config["SECRET_KEY"] = "very secret"
@@ -18,6 +19,10 @@ db = SQLAlchemy(app)
 
 login_manager = LoginManager(app)
 login_manager.login_view = "login"
+
+# insight pour les logs sur azure :
+insight = ApplicationInsights(instrumentation_key='7269625c-4137-42ed-b32b-1d89e1835928')
+insight.init_app(app)
 
 from .routes import *
 from .models import *
